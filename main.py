@@ -2,6 +2,7 @@ from modules.remoteok import get_jobs
 from modules.job_filter import filter_jobs
 from modules.ai_match import match_job
 from modules.excel import save_jobs
+from modules.alert import send_alert
 
 print("=" * 50)
 print("      AI JOB AGENT")
@@ -26,6 +27,17 @@ for job in filtered_jobs:
         final_jobs.append(job)
 
 print(f"AI Matched Jobs: {len(final_jobs)}")
+
+# High Match Alert
+high_match_jobs = [
+    job for job in final_jobs
+    if job.get("Score", 0) >= 40
+]
+
+print(f"High Match Jobs (40+): {len(high_match_jobs)}")
+
+for job in high_match_jobs:
+    send_alert(job)
 
 # Sort by highest score
 final_jobs.sort(key=lambda job: job["Score"], reverse=True)
