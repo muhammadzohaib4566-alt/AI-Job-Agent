@@ -27,6 +27,12 @@ for job in filtered_jobs:
 
 print(f"AI Matched Jobs: {len(final_jobs)}")
 
+# Sort by highest score
+final_jobs.sort(key=lambda job: job["Score"], reverse=True)
+
+# Keep top 10 jobs
+final_jobs = final_jobs[:10]
+
 # Save Excel
 save_jobs(final_jobs)
 

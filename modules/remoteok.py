@@ -1,5 +1,6 @@
 import requests
 
+
 def get_jobs():
 
     url = "https://remoteok.com/api"
@@ -20,13 +21,15 @@ def get_jobs():
 
             jobs.append({
 
-                "Company": job.get("company"),
+                "Company": job.get("company", ""),
 
-                "Position": job.get("position"),
+                "Position": job.get("position", ""),
 
-                "Location": job.get("location"),
+                "Location": job.get("location", ""),
 
-                "Apply": job.get("apply_url")
+                "Apply": job.get("apply_url", ""),
+
+                "Description": job.get("description", "")
 
             })
 
