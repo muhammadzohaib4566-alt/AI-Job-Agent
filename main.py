@@ -1,4 +1,6 @@
-from modules.remoteok import get_jobs
+from modules.remoteok import get_jobs as remoteok_jobs
+from modules.remotive import get_jobs as remotive_jobs
+from modules.jobicy import get_jobs as jobicy_jobs
 from modules.job_filter import filter_jobs
 from modules.ai_match import match_job
 from modules.excel import save_jobs
@@ -9,7 +11,19 @@ print("      AI JOB AGENT")
 print("=" * 50)
 
 # Get Jobs
-jobs = get_jobs()
+jobs = remoteok_jobs()
+jobs.extend(remotive_jobs())
+jobs.extend(jobicy_jobs())
+# Remove duplicate jobs
+unique_jobs = {}
+for job in jobs:
+    key = (
+        job.get("Company", "").strip().lower(),
+        job.get("Position", "").strip().lower()
+    )
+    unique_jobs[key] = job
+
+jobs = list(unique_jobs.values())
 print(f"Total Jobs Found: {len(jobs)}")
 
 # Filter Jobs
