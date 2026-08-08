@@ -1,0 +1,53 @@
+import requests
+import pandas as pd
+
+print("=" * 50)
+print("AI JOB AGENT STARTED")
+print("=" * 50)
+
+URL = "https://remoteok.com/api"
+
+HEADERS = {
+    "User-Agent": "Mozilla/5.0"
+}
+
+try:
+    response = requests.get(URL, headers=HEADERS)
+
+    if response.status_code != 200:
+        print("Error:", response.status_code)
+        exit()
+
+    jobs = response.json()
+
+    data = []
+
+    for job in jobs[1:]:
+
+        company = job.get("company", "")
+        position = job.get("position", "")
+        location = job.get("location", "")
+        salary = job.get("salary", "")
+        tags = ", ".join(job.get("tags", []))
+        apply = job.get("apply_url", "")
+
+        data.append({
+            "Company": company,
+            "Position": position,
+            "Location": location,
+            "Salary": salary,
+            "Skills": tags,
+            "Apply Link": apply
+        })
+
+    df = pd.DataFrame(data)
+
+    df.to_excel("Jobs.xlsx", index=False)
+
+    print()
+    print("SUCCESS")
+    print("Total Jobs:", len(df))
+    print("Excel File Created: Jobs.xlsx")
+
+except Exception as e:
+    print(e)
